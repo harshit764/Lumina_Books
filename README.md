@@ -1,20 +1,16 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Lumina Books 📚
 
-# Run and deploy your AI Studio app
+An AI-powered book management system integrated with Gemini AI and Firebase. This project helps users manage their book collections with smart AI-driven insights.
 
-This contains everything you need to run your app locally.
+## ✨ Features
+* **AI Integration:** Powered by Google Gemini for smart book suggestions and descriptions.
+* **Database:** Firebase integration for real-time data management.
+* **Frontend:** Built with React and Vite for a fast, responsive user experience.
 
-View your app in AI Studio: https://ai.studio/apps/0c286d60-faaf-403a-83ef-e7e78df3fd8f
+## 🚀 Run Locally
 
-## Run Locally
+**Prerequisites:** Node.js installed on your system.
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/harshit764/Lumina_Books.git](https://github.com/harshit764/Lumina_Books.git)
