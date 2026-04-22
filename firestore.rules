@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // --- Books ---
+    match /books/{bookId} {
+      function isValidBook(data) {
+        return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+               data.author is string && data.author.size() > 0 && data.author.size() <= 200 &&
+               data.description is string && data.description.size() <= 2000 &&
+               data.price is number && data.price >= 0 &&
+               data.category is string && data.category.size() > 0 &&
+               data.coverUrl is string && data.coverUrl.size() > 0 && data.coverUrl.size() <= 1000;
+      }
+
+      allow read: if true; // Publicly viewable
+      
+      allow create: if isAdmin() && isValidId(bookId) && 
+                      isValidBook(request.resource.data) &&
+                      request.resource.data.createdAt == request.time &&
+                      request.resource.data.updatedAt == request.time;
+                      
+      allow update: if isAdmin() && isValidBook(request.resource.data) &&
+                      request.resource.data.createdAt == resource.data.createdAt &&
+                      request.resource.data.updatedAt == request.time;
+                      
+      allow delete: if isAdmin();
+    }
+
+    // --- Categories ---
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // --- Admins (Restricted access, users can only see their own doc IF it exists) ---
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && request.auth.uid == adminId;
+      allow write: if false; // Admins must be added via console or cloud function for safety
+    }
+  }
+}

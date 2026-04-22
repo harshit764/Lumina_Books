@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "Book": {
+      "title": "Book",
+      "description": "Represents a book in the store",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the book" },
+        "author": { "type": "string", "description": "The author of the book" },
+        "description": { "type": "string", "description": "A brief summary of the book" },
+        "price": { "type": "number", "description": "The price in USD" },
+        "category": { "type": "string", "description": "Primary category/genre" },
+        "coverUrl": { "type": "string", "description": "URL to the cover image" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "author", "price", "category", "coverUrl"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Book category",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "slug": { "type": "string" }
+      },
+      "required": ["name", "slug"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Admin user record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["super", "editor"] }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/books/{bookId}": {
+      "schema": "Book",
+      "description": "Collection of books"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Collection of book categories"
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Restricted list of admin users"
+    }
+  }
+}
